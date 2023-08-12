@@ -22,15 +22,15 @@ decimal result = 0;   // вспомогательная переменная, и
 int i = 0; // счетчик, используемый в цикле цикле;
 if (n == 0)  // в случае, если введенное число равно нулю;
     numberofdigits = 1;
-else if (n>0 & n<1)  // это случай, когда целая часть n равна нулю, а дробная не равна нулю; 
+else if (n>0 && n<1)  // это случай, когда целая часть n равна нулю, а дробная не равна нулю; 
     {
      nfractionpart = ninterm;
-     while (ninterm*10 > 0 & ninterm*10 < 10)
+     while (ninterm*10 > 0 && ninterm*10 < 10)
             {
              ninterm = ninterm*10;
              while (i<10)
                 {
-                 if (ninterm > i & ninterm < i+1)
+                 if (ninterm > i && ninterm < i+1)
                      {
                       result = i;
                       i=9; 
@@ -56,7 +56,7 @@ else // это случай, когда целая часть n не равна 
          result = ninterm/div;
          while (i<10)
             {
-             if (result > i & result < i+1)
+             if (result > i && result < i+1)
                  {
                   result = i;
                   i=9;
@@ -71,12 +71,12 @@ else // это случай, когда целая часть n не равна 
     nfractionpart = ninterm; // после цикла получаем дробную часть числа n;
     if (ninterm>0)           // в случае, если дробная часть n не равна нулю, то тогда 
         {                    // считаем количество цифр в дробной части;              
-         while (ninterm*10 > 0 & ninterm*10 < 10)
+         while (ninterm*10 > 0 && ninterm*10 < 10)
             {
              ninterm = ninterm*10;
              while (i<10)
                 {
-                 if (ninterm > i & ninterm < i+1)
+                 if (ninterm > i && ninterm < i+1)
                      {
                       result = i;
                       i=9;
