@@ -7,7 +7,7 @@ System.Console.WriteLine("Введите целое число:");
 int n = Convert.ToInt32(Console.ReadLine());
 int div = 10;
 if (n < 0)
-    n = -n;
+    n = -n; //если введенное число окажется меньше нуля, то необходимо взять его модуль
 if (n < 100)
     System.Console.WriteLine("Нет");
 else
