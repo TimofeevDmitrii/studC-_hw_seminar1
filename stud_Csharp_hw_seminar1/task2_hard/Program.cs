@@ -16,7 +16,7 @@ if (n<0)
 decimal ninterm = n;     // промежуточное значение n, используемое для вычислений;
 int div = 1;   // делитель;
 int numberofdigits = 1;  //переменная для хранения количества цифр в числе n;
-decimal nholepart = 0;    // целая часть числа n;
+decimal nintegpart = 0;    // целая часть числа n;
 decimal nfractionpart = 0;  // дробная часть числа n;
 decimal result = 0;   // вспомогательная переменная, используемая в вычислениях;
 int i = 0; // счетчик, используемый в цикле цикле;
@@ -30,7 +30,7 @@ else if (n>0 && n<1)  // это случай, когда целая часть n
              ninterm = ninterm*10;
              while (i<10)
                 {
-                 if (ninterm > i && ninterm < i+1)
+                 if (ninterm >= i && ninterm < i+1)
                      {
                       result = i;
                       i=9; 
@@ -64,7 +64,7 @@ else // это случай, когда целая часть n не равна 
              i++;
             }
          i = 0;
-         nholepart = nholepart + result*div; // в цикле попутно получаем значение целой части числа n; 
+         nintegpart = nintegpart + result*div; // в цикле попутно получаем значение целой части числа n; 
          ninterm = ninterm - result*div;
          div = div/10;
         }
@@ -76,7 +76,7 @@ else // это случай, когда целая часть n не равна 
              ninterm = ninterm*10;
              while (i<10)
                 {
-                 if (ninterm > i && ninterm < i+1)
+                 if (ninterm >= i && ninterm < i+1)
                      {
                       result = i;
                       i=9;
@@ -90,5 +90,5 @@ else // это случай, когда целая часть n не равна 
         }
     }
 System.Console.WriteLine($"в веденном числе {numberofdigits} цифр(а/ы)");
-System.Console.WriteLine($"целая часть числа равна {k*nholepart}");
+System.Console.WriteLine($"целая часть числа равна {k*nintegpart}");
 System.Console.WriteLine($"дробная часть числа равна {k*nfractionpart}");
