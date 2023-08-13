@@ -19,7 +19,9 @@ int div = 1;   // делитель;
 decimal nintegpart = 0;    // целая часть числа n;
 decimal nfractionpart = 0;  // дробная часть числа n;
 decimal result = 0;   // вспомогательная переменная, используемая в вычислениях;
+decimal result1 = 0;   // эта переменная будет использована при нахождении первой цифры целого части n;
 int i = 0; // счетчик, используемый в цикле цикле;
+int f = 10; 
 if (n>=0 && n<10)  // это случай, когда целая часть n меньше 10; 
     {
      while (i<10)
@@ -38,20 +40,28 @@ if (n>=0 && n<10)  // это случай, когда целая часть n м
      if (nfractionpart == 0)
          System.Console.WriteLine("Число состоит менее, чем из двух цифр"); 
      else
-     {
-     result = ninterm*10;     // удаляем одну цифру из дробной части и
-     while (i<10)             
-        {
-         if (result >= i && result < i+1)
-             {
-              result = i;
-              i=9; 
-             }
-         i++;
+         {
+         nfractionpart = 0; // необходимо заново перезаписать новую дробную часть, т.к. в противном случае в результате удаления одной цифры
+         while (ninterm*10 > 0 && ninterm*10 < 10) // из дробной части n число разрядов останется неизменным и на конце дробной части будет отображаться 0 при выводе!!!
+            {
+             ninterm = ninterm*10;
+             while (i<10)
+                {
+                 if (ninterm >= i && ninterm < i+1)
+                     {
+                      result = i;
+                      i=9; 
+                     }
+                 i++;
+                }
+             i = 0;
+             ninterm = ninterm - result;
+             if (f != 10)
+                 nfractionpart = nfractionpart + result/(f/10); // записываем значение новой дробной части
+             f = f*10;
+            }
+        System.Console.WriteLine(k*nintegpart+k*nfractionpart);
         }
-        nfractionpart = ninterm*10 - result;   // получаем новое значение дробной части; 
-     }
-    System.Console.WriteLine(k*nintegpart+k*nfractionpart);
     }            
 else // это случай, когда целая часть n больше, либо равна 10;
     {   
@@ -73,10 +83,12 @@ else // это случай, когда целая часть n больше, л
              i++;
             }
          i = 0; 
+         if (l == 1)
+             result1 = result;
          ninterm = ninterm - result*div;
+         if (l==2)
+             ninterm = ninterm + result1*div;
          div = div/10;
         }
-        div = div*10;
-        n = n - result*div; // вычитаем из n значение второго по счету слева разряда;
-        System.Console.WriteLine(k*n);
+        System.Console.WriteLine(k*ninterm);
     }
