@@ -4,13 +4,13 @@
 // Исходный массив заполняется случайными целыми числами. Далее провести ряд экспериментов с различной размерностью массива, 
 // засечь время выполнения каждого, объяснить в соответствии с нотацией Big O полученные результаты. 
 // Выполнять всё с помощью методов. Рассказать про плюсы и минусы каждого алгоритма.
-int Insertsize()
+int InsertSize()
 {
     int l = 0;
     do 
         {
             System.Console.WriteLine("Введите размер сортируемого одномерного массива:");
-            string str = Console.ReadLine();
+            string? str = Console.ReadLine();
             if (str == "")
             {    
                 System.Console.WriteLine("Вы не обозначили длину массива!");
@@ -27,143 +27,117 @@ int Insertsize()
     return l;
 }
 
-int[] Makearray(int length)
+int[] MakeArray(int length)
 {
-    int[] newarray = new int [length];
+    int[] newArray = new int [length];
+    Random rnd = new Random();
     for (int i=0; i<length; i++)
         {
-            newarray[i]= new Random().Next(0,101);
+            newArray[i]= rnd.Next(0,101);
         }
-    return newarray;
+    return newArray;
 }
 
-void Printarray(int[] A)
+void PrintArray(int[] array)
 {
-    if (A.Length==0)
+    if (array.Length==0)
         System.Console.WriteLine("Массив пуст");
     else
     {
-        for (int i=0; i<A.Length; i++)
+        for (int i=0; i<array.Length; i++)
         {
-            System.Console.Write($"{A[i]} ");
+            System.Console.Write($"{array[i]} ");
         }
     }
     System.Console.WriteLine();
 }
 
-// int[] Bubblesort(int[] unsortarr)
-// {
-//     if (unsortarr.Length<=1)
-//         return unsortarr;
-//     else
-//     { 
-//         int count = 0;
-//         do 
-//         {
-//             count = 0;
-//             int k = 0;
-//             for (int i=0; i<unsortarr.Length-1; i++)
-//             {
-//                 if (unsortarr[i]>unsortarr[i+1])
-//                 {
-//                 k = unsortarr[i+1];
-//                 unsortarr[i+1] = unsortarr[i];
-//                 unsortarr[i] = k;
-//                 count = count+1;
-//                 }
-//             }
-//         }
-//         while (count != 0);
-//         return unsortarr;
-//     }
-// }
-
-int [] Fastsort(int[] unsortA)
+int[] BubbleSort(int[] unsortArr)
 {
-    if (unsortA.Length<=1)
-        return unsortA;
+    if (unsortArr.Length<=1)
+        return unsortArr;
+    else
+    { 
+        int count = 0; // переменная будет каждый раз увеличиваться на 1, если произошла перестановка элементов
+        //  во время прохода по массиву; к следующему проходу по массиву переменная обнуляется;
+        int m = 0; // переменная будет увеличиваться на единицу каждый раз, когда совершен один проход по массиву;
+        do 
+        {
+            count = 0; 
+            int k = 0; // буферная переменная
+            for (int i=0; i<unsortArr.Length-1-m; i++)
+            {
+                if (unsortArr[i]>unsortArr[i+1])
+                {
+                k = unsortArr[i+1];
+                unsortArr[i+1] = unsortArr[i];
+                unsortArr[i] = k;
+                count = count+1;
+                }
+            }
+            m = m+1;
+        }
+        while (count != 0); // как только не зафиксировано ни одной перестановки элементов в массиве за проход,
+        // то можно сделать стоп - массив отсортирован;
+        return unsortArr;
+    }
+}
+
+int [] FastSort(int[] unSortA)
+{    
+    Random rnd = new Random();
+    if (unSortA.Length<=1)  // База рекурсии
+        return unSortA;
     else
     {
-        int i = new Random().Next(0, unsortA.Length);
-        System.Console.WriteLine(i);
-        System.Console.WriteLine(unsortA[i]);
-        int[] less = new int [0];
-        int[] upper = new int [0];
-        for (int k=0; k<unsortA.Length; k++)
+        int i = rnd.Next(0, unSortA.Length); // Выбираем опорный элемент в сортируемом массиве
+        int[] less = new int [0];  // массив с элементами меньше, чем опорный, или равными опорному элементу
+        int[] upper = new int [0]; // масиив с элементами больше, чем опорный
+        for (int k=0; k<unSortA.Length; k++)
         {
-            if (unsortA[k]!=unsortA[i])
+            if (k!=i)
             {
-                if (unsortA[k]<=unsortA[i])
+                if (unSortA[k]<=unSortA[i])
                 {
-                    int[] interless = new int [less.Length+1]; ///// остановился последний раз здесь!!!!
-                    if (less.Length!=0)
-                    {
-                        Array.Copy(less,0,interless,0,less.Length);
-                    }    
-                    interless[interless.Length-1]=unsortA[k];
-                    less = interless;
+                    int[] interLess = new int [less.Length+1]; // буферный массив для создания нового массива less 
+                    for (int l=0; l<less.Length; l++)  // копируем элементы из less в буферный массив
+                        interLess[l] = less[l];    
+                    interLess[interLess.Length-1]=unSortA[k]; // добавляем в конец буферного массива новый элемент
+                    less = interLess; // фиксируем все изменения в массиве less
                 }
                 else
                 {
-                    int[] interupper = new int[upper.Length+1];
-                    if (upper.Length!=0)
-                    {
-                        Array.Copy(upper,0,interupper,0,upper.Length);
-                    }    
-                    interupper[interupper.Length-1]=unsortA[k];
-                    upper = interupper;
+                    int[] interUpper = new int[upper.Length+1]; // буферный массив для создания нового массива upper
+                    for (int l=0; l<upper.Length; l++)   // копируем элементы из upper в буферный массив
+                        interUpper[l] = upper[l];    
+                    interUpper[interUpper.Length-1]=unSortA[k]; // добавляем в конец буферного массива новый элемент
+                    upper = interUpper; // фиксируем все изменения в массиве upper
                 }
             }
         }
-        int[] endsortA = new int[less.Length+1+upper.Length];
-        System.Console.WriteLine($"lengthless={less.Length}, lengthupper={upper.Length}, endsortA={endsortA.Length}");
-        less = Fastsort(less);
-        upper = Fastsort(upper);
-        if (endsortA.Length!=2)
-        {
-            if (less.Length!=0)
-            {
-            Array.Copy(less,0,endsortA,0,less.Length);
-            if (upper.Length==0)
-                endsortA[endsortA.Length-1]=unsortA[i];
-            else
-                endsortA[i]=unsortA[i];
-            }
-            if (upper.Length!=0)
-            {
-                if (less.Length==0)
-                {
-                    endsortA[0]=unsortA[i];
-                    Array.Copy(upper,0,endsortA,i+1,upper.Length);
-                }
-                else
-                {
-                    endsortA[0]=unsortA[i];
-                    Array.Copy(upper,0,endsortA,1,upper.Length);
-                }
-            }
-        }
+        less = FastSort(less); // применяем рекурсивно метод быстрой сортировки к массивам less и upper
+        upper = FastSort(upper);
+        int[] endSortA = new int[less.Length+1+upper.Length]; // создаем итоговый массив, полученный слиянием 
+        // массива с элементами меньше опорного, либо равными опорному, опорного элемента и массива с элементами 
+        // больше опорного
+        if (less.Length==0)
+            endSortA[0]=unSortA[i];
         else
         {
-            if (less.Length!=0)
-            {
-                endsortA[0]=less[0];
-                endsortA[1]=unsortA[i];
-            }
-            if (upper.Length!=0)
-            {
-                endsortA[0]=unsortA[i];
-                endsortA[1]=upper[0];
-            }
+            for (int l=0; l<less.Length; l++)
+                endSortA[l] = less[l];
+            endSortA[less.Length]=unSortA[i];
         }
-        return endsortA;
+        for (int l=0; l<upper.Length; l++)
+            endSortA[less.Length+1+l] = upper[l];
+        return endSortA;
     }    
 } 
 
-int size = Insertsize();
-int[] arr = Makearray(size);
-Printarray(arr);
-// int[] arrbubble = Bubblesort(arr);
-// Printarray(arrbubble);
-int[] arrfast = Fastsort(arr);
-Printarray(arrfast);
+int size = InsertSize();
+int[] arr = MakeArray(size);
+PrintArray(arr);
+int[] arrBubble = BubbleSort(arr);
+PrintArray(arrBubble);
+int[] arrFast = FastSort(arr);
+PrintArray(arrFast);
