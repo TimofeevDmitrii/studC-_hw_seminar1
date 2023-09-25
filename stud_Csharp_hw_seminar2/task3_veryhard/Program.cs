@@ -4,6 +4,9 @@
 // Исходный массив заполняется случайными целыми числами. Далее провести ряд экспериментов с различной размерностью массива, 
 // засечь время выполнения каждого, объяснить в соответствии с нотацией Big O полученные результаты. 
 // Выполнять всё с помощью методов. Рассказать про плюсы и минусы каждого алгоритма.
+
+using System.Diagnostics;
+
 int InsertSize()
 {
     int l = 0;
@@ -91,27 +94,38 @@ int [] FastSort(int[] unSortA)
     else
     {
         int i = rnd.Next(0, unSortA.Length); // Выбираем опорный элемент в сортируемом массиве
-        int[] less = new int [0];  // массив с элементами меньше, чем опорный, или равными опорному элементу
-        int[] upper = new int [0]; // масиив с элементами больше, чем опорный
+        // найдем длины вспомогательных массивов
+        int lessLength = 0;  //длина массива с элементами меньше, чем опорный, или равными опорному элементу
+        int upperLength = 0; // длина массива с элементами больше, чем опорный
+        // Длины вспомогательных массивов будут равны:
+        // less - количеству элементов меньше опорного или равных опорному элементу
+        // upper - количеству элементов больше опорного   
+        for (int q=0; q<unSortA.Length; q++)
+        {
+            if (q!=i) 
+                if (unSortA[q]<=unSortA[i])
+                    lessLength++;
+                else
+                    upperLength++;
+        }
+        //узнав длины, создаем вспомогательные массивы
+        int[] less = new int [lessLength]; 
+        int l = 0; // номер ячейки в массиве less, в которую будет заноситься новый элемент из unSortA
+        int[] upper = new int [upperLength]; 
+        int u = 0; // номер ячейки в массиве upper, в которую будет заноситься новый элемент из unSortA
         for (int k=0; k<unSortA.Length; k++)
         {
             if (k!=i)
             {
                 if (unSortA[k]<=unSortA[i])
                 {
-                    int[] interLess = new int [less.Length+1]; // буферный массив для создания нового массива less 
-                    for (int l=0; l<less.Length; l++)  // копируем элементы из less в буферный массив
-                        interLess[l] = less[l];    
-                    interLess[interLess.Length-1]=unSortA[k]; // добавляем в конец буферного массива новый элемент
-                    less = interLess; // фиксируем все изменения в массиве less
+                    less[l]=unSortA[k]; // заносим новый элемент в следующую по порядку ячейку в массиве less
+                    l++; // увеличиваем номер следующей ячейки на 1
                 }
                 else
                 {
-                    int[] interUpper = new int[upper.Length+1]; // буферный массив для создания нового массива upper
-                    for (int l=0; l<upper.Length; l++)   // копируем элементы из upper в буферный массив
-                        interUpper[l] = upper[l];    
-                    interUpper[interUpper.Length-1]=unSortA[k]; // добавляем в конец буферного массива новый элемент
-                    upper = interUpper; // фиксируем все изменения в массиве upper
+                    upper[u]=unSortA[k]; // заносим новый элемент в следующую по порядку ячейку в массиве upper
+                    u++; // увеличиваем номер следующей ячейки на 1
                 }
             }
         }
@@ -124,20 +138,29 @@ int [] FastSort(int[] unSortA)
             endSortA[0]=unSortA[i];
         else
         {
-            for (int l=0; l<less.Length; l++)
-                endSortA[l] = less[l];
+            for (int j=0; j<less.Length; j++)
+                endSortA[j] = less[j];
             endSortA[less.Length]=unSortA[i];
         }
-        for (int l=0; l<upper.Length; l++)
-            endSortA[less.Length+1+l] = upper[l];
+        for (int j=0; j<upper.Length; j++)
+            endSortA[less.Length+1+j] = upper[j];
         return endSortA;
     }    
 } 
 
+Stopwatch time = new Stopwatch(); 
+
 int size = InsertSize();
 int[] arr = MakeArray(size);
-PrintArray(arr);
+// PrintArray(arr);
+time.Start();
 int[] arrBubble = BubbleSort(arr);
-PrintArray(arrBubble);
+time.Stop(); 
+Console.WriteLine($"Сортировка методом 'пузырька' заняла {time.ElapsedMilliseconds} миллисекунд");
+// PrintArray(arrBubble);
+time.Reset();
+time.Start();
 int[] arrFast = FastSort(arr);
-PrintArray(arrFast);
+time.Stop(); 
+Console.WriteLine($"Сортировка методом быстрой сортировки заняла {time.ElapsedMilliseconds} миллисекунд");
+// PrintArray(arrFast);
